@@ -1,0 +1,52 @@
+﻿<Window x:Class="WPFUI.MainMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="RaFF's Enchanted Lands" Height="600" Width="500" ResizeMode="CanMinimize">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="/Engine;component/Images/Backgrounds/Paper_texture.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
+
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" >
+            <Grid.Background>
+                <SolidColorBrush Color="SaddleBrown" Opacity=".5"/>
+            </Grid.Background>
+            <TextBlock Text="RaFF's Enchanted Lands" Foreground="Black" FontSize="43" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+        <Label Grid.Row="1" Grid.Column="1" Content="Main Menu" FontSize="30" HorizontalContentAlignment="Center"/>
+
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" Height="40" Width="150" Margin="10" HorizontalAlignment="Center" Content="New Game" FontSize="20" Click="OnClick_NewGame"/>
+            <Button Grid.Row="1" Height="40" Width="150" Margin="10" HorizontalAlignment="Center" Content="Load Game" FontSize="20"/>
+            <Button Grid.Row="2" Height="40" Width="150" Margin="10" HorizontalAlignment="Center" Content="About" FontSize="20"/>
+            <Button Grid.Row="3" Height="40" Width="150" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Quit Game" FontSize="20" Click="OnClick_Quit"/>
+        </Grid>
+
+    </Grid>
+</Window>
