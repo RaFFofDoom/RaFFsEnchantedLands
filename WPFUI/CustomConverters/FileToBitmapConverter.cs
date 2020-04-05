@@ -8,7 +8,7 @@ namespace WPFUI.CustomConverters
 {
     public class FileToBitmapConverter : IValueConverter
     {
-        private static readonly Dictionary<string, BitmapImage> _locations =
+        private static readonly Dictionary<string, BitmapImage> _convertedImage =
             new Dictionary<string, BitmapImage>();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -18,14 +18,14 @@ namespace WPFUI.CustomConverters
                 return null;
             }
 
-            if (!_locations.ContainsKey(filename))
+            if (!_convertedImage.ContainsKey(filename))
             {
-                _locations.Add(filename,
+                _convertedImage.Add(filename,
                                new BitmapImage(new Uri($"{AppDomain.CurrentDomain.BaseDirectory}{filename}",
                                                        UriKind.Absolute)));
             }
 
-            return _locations[filename];
+            return _convertedImage[filename];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

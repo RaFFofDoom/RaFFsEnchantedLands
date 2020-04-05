@@ -118,6 +118,9 @@ namespace Engine.ViewModels
 
         #endregion
 
+        /// <summary>
+        /// Default GameSession and Player
+        /// </summary>
         public GameSession()
         {
             CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, 100);
@@ -138,6 +141,9 @@ namespace Engine.ViewModels
             CurrentLocation = CurrentWorld.LocationAt(0, 0);
         }
 
+        /// <summary>
+        /// New Game - GameSession and Player
+        /// </summary>
         public GameSession(string selectedPlayerName, string selectedPlayerClass)
         {
             CurrentPlayer = new Player(selectedPlayerName, selectedPlayerClass, 0, 10, 10, 100);
@@ -158,6 +164,32 @@ namespace Engine.ViewModels
             CurrentLocation = CurrentWorld.LocationAt(0, 0);
 
         }
+
+        /// <summary>
+        /// Load Game - GameSession and Player
+        /// </summary>
+        public GameSession(string loadedPlayerName, string loadedPlayerClass, int loadedExperiencePoints, int loadedMaxiumumHitPoints, int loadedCurrentHitPoints, int loadedGold)
+        {
+            CurrentPlayer = new Player(loadedPlayerName, loadedPlayerClass, loadedExperiencePoints, loadedMaxiumumHitPoints, loadedCurrentHitPoints, loadedGold);
+
+            if (!CurrentPlayer.Inventory.Weapons.Any())
+            {
+                CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));
+            }
+
+            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(2001));
+            CurrentPlayer.LearnRecipe(RecipeFactory.RecipeByID(1));
+            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3001));
+            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3002));
+            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3003));
+
+            CurrentWorld = WorldFactory.CreateWorld();
+
+            CurrentLocation = CurrentWorld.LocationAt(0, 0);
+
+        }
+
+
 
         public void MoveNorth()
         {

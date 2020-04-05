@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Engine.Models
 {
@@ -30,13 +31,30 @@ namespace Engine.Models
 
                 OnPropertyChanged();
 
-                SetLevelAndMaximumHitPoints();
+                exp_dict[0] = 0;
+                exp_dict[1] = 0;
+                exp_dict[2] = 50;
+                exp_dict[3] = 120;
+                exp_dict[4] = 200;
+                exp_dict[5] = 300;
+                exp_dict[6] = 450;
+                exp_dict[7] = 620;
+                exp_dict[8] = 810;
+                exp_dict[9] = 1020;
+                exp_dict[10] = 1250;
+                exp_dict[11] = 0;
+
+                LevelUp();
             }
         }
 
         public ObservableCollection<QuestStatus> Quests { get; }
 
         public ObservableCollection<Recipe> Recipes { get; }
+
+        public Dictionary<int, int> exp_dict = new Dictionary<int, int>();
+
+
 
         #endregion
 
@@ -67,17 +85,58 @@ namespace Engine.Models
             }
         }
 
-        private void SetLevelAndMaximumHitPoints()
+        private void LevelUp()
         {
             int originalLevel = Level;
 
-            Level = (ExperiencePoints / 100) + 1;
+            int playerClassHitDice = 10;
+            int raceHitPointModifier = 2;
 
-            if (Level != originalLevel)
+            switch (ExperiencePoints)
             {
-                MaximumHitPoints = Level * 10;
-
-                OnLeveledUp?.Invoke(this, System.EventArgs.Empty);
+                default:
+                    Level = 1;
+                    MaximumHitPoints = Level * 10;
+                    break;
+                case int n when (n > 0 && n < exp_dict[2]):
+                    Level = 1; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    break;
+                case int n when (n >= exp_dict[2] && n < exp_dict[3]):
+                    Level = 2; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
+                case int n when (n >= exp_dict[3] && n < exp_dict[4]):
+                    Level = 3; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
+                case int n when (n >= exp_dict[4] && n < exp_dict[5]):
+                    Level = 4; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
+                case int n when (n >= exp_dict[5] && n < exp_dict[6]):
+                    Level = 5; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
+                case int n when (n >= exp_dict[6] && n < exp_dict[7]):
+                    Level = 6; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
+                case int n when (n >= exp_dict[7] && n < exp_dict[8]):
+                    Level = 7; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
+                case int n when (n >= exp_dict[8] && n < exp_dict[9]):
+                    Level = 8; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
+                case int n when (n >= exp_dict[9] && n < exp_dict[10]):
+                    Level = 9; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
+                case int n when (n >= exp_dict[10]):
+                    Level = 10; MaximumHitPoints = (Level * playerClassHitDice) + raceHitPointModifier;
+                    if (Level != originalLevel) { OnLeveledUp?.Invoke(this, System.EventArgs.Empty); }
+                    break;
             }
         }
     }

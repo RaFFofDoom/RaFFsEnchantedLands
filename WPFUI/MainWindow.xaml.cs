@@ -8,6 +8,7 @@ using Engine.EventArgs;
 using Engine.Models;
 using Engine.Services;
 using Engine.ViewModels;
+using System.IO;
 
 namespace WPFUI
 {
@@ -21,8 +22,8 @@ namespace WPFUI
 
         public MainWindow(string selectedPlayerName, string selectedPlayerClass)
         {
-            GameSession _gameSessionNewGame = new GameSession(selectedPlayerName, selectedPlayerClass);
-            _gameSession = _gameSessionNewGame;
+            GameSession gameSessionNewGame = new GameSession(selectedPlayerName, selectedPlayerClass);
+            _gameSession = gameSessionNewGame;
 
             InitializeComponent();
             InitializeUserInputActions();
@@ -31,6 +32,20 @@ namespace WPFUI
 
             DataContext = _gameSession;
         }
+
+        public MainWindow()
+        {
+            GameSession gameSessionLoadGame = SaveLoadGame.XMLLoadData(File.ReadAllText(SaveLoadGame.PLAYER_DATA_FILE_NAME));
+            _gameSession = gameSessionLoadGame;
+
+            InitializeComponent();
+            InitializeUserInputActions();
+
+            _messageBroker.OnMessageRaised += OnGameMessageRaised;
+
+            DataContext = _gameSession;
+        }
+
 
         private void OnClick_MoveNorth(object sender, RoutedEventArgs e)
         {
@@ -126,6 +141,7 @@ namespace WPFUI
         private void Onclick_SaveGame(object sender, RoutedEventArgs e)
         {
            _gameSession.SaveGame();
+            MessageBox.Show("Game has been saved", "Save Game");
 
         }
     }

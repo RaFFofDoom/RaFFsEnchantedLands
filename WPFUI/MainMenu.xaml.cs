@@ -24,16 +24,23 @@ namespace WPFUI
             InitializeComponent();
         }
 
-        private void OnClick_Quit(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void OnClick_NewGame(object sender, RoutedEventArgs e)
+        private void Click_btnNewGame(object sender, RoutedEventArgs e)
         {
             NewGame newGame = new NewGame();
             Close();
             newGame.ShowDialog();
+        }
+
+        private void Click_btnQuitGame(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void Click_btnLoadGame(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            Close();
+            mainWindow.ShowDialog();
         }
     }
 }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Engine.Models;
 using System.Xml;
 using Engine.ViewModels;
-using System.IO;
 
 namespace Engine.Services
 {
@@ -114,7 +113,57 @@ namespace Engine.Services
             return playerData.InnerXml; // The XML document, as a string, so we can save the data to disk
         }
 
+        public static GameSession XMLLoadData(string xmlPlayerData)
+        {
+            XmlDocument playerData = new XmlDocument();
 
+            playerData.LoadXml(xmlPlayerData);
+
+            string playerName = playerData.SelectSingleNode("/Player/Stats/PlayerName").InnerText;
+            string playerCharacterClass = playerData.SelectSingleNode("/Player/Stats/PlayerClass").InnerText;
+            int playerExperiencePoints = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/ExperiencePoints").InnerText);
+            int playerMaximumHitPoitns = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/MaximumHitPoints").InnerText);
+            int playerCurrentHitPoints = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/CurrentHitPoints").InnerText);
+            int playerGold = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/Gold").InnerText);
+            //int level = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/Level").InnerText);
+
+
+
+            // Race raceToLoad = World.Races.Where((r => r.RaceName == race)).First();
+            //Class classToLoad = World.Classes.Where((r => r.ClassName == playerClass)).First();
+            GameSession gameSession = new GameSession(playerName, playerCharacterClass, playerExperiencePoints, playerMaximumHitPoitns, playerCurrentHitPoints, playerGold);
+            //Player player = new Player(playerName, currentHitPoints, maximumHitPoints, gold, experiencePoints, raceToLoad, classToLoad);
+
+            //player.Level = level;
+
+            //int currentLocationID = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/CurrentLocation").InnerText);
+
+            //player.CurrentLocation = World.LocationByID(currentLocationID);
+
+            //foreach (XmlNode node in playerData.SelectNodes("/Player/InventoryItems/InventoryItem"))
+            //{
+            //    int id = Convert.ToInt32(node.Attributes["ID"].Value);
+            //    int quantity = Convert.ToInt32(node.Attributes["Quantity"].Value);
+
+            //    for (int i = 0; i < quantity; i++)
+            //    {
+            //        player.AddItemToInventory(World.ItemByID(id));
+            //    }
+            //}
+
+            //foreach (XmlNode node in playerData.SelectNodes("/Player/PlayerQuests/PlayerQuest"))
+            //{
+            //    int id = Convert.ToInt32(node.Attributes["ID"].Value);
+            //    bool isCompleted = Convert.ToBoolean(node.Attributes["IsCompleted"].Value);
+
+            //    PlayerQuest playerQuest = new PlayerQuest(World.QuestByID(id));
+            //    playerQuest.IsCompleted = isCompleted;
+
+            //    player.Quests.Add(playerQuest);
+            //}
+
+            return gameSession;
+        }
 
     }
 
