@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CharacterClasses>
+  <CharacterClass ID="1" HitDice="10">
+    <Name><![CDATA[Warrior]]></Name>
+    <Description><![CDATA[Master of melee combat]]></Description>
+  </CharacterClass>
+  <CharacterClass ID="2" HitDice="10">
+    <Name><![CDATA[Paladin]]></Name>
+    <Description><![CDATA[Holy Crusader]]></Description>
+  </CharacterClass>
+  <CharacterClass ID="3" HitDice="8">
+    <Name><![CDATA[Rogue]]></Name>
+    <Description><![CDATA[Thief that can vanish and backstab]]></Description>
+  </CharacterClass>
+  <CharacterClass ID="4" HitDice="8">
+    <Name><![CDATA[Hunter]]></Name>
+    <Description><![CDATA[Wilderness and ranged combat expert]]></Description>
+  </CharacterClass>
+  <CharacterClass ID="5" HitDice="6">
+    <Name><![CDATA[Mage]]></Name>
+    <Description><![CDATA[Master of arcane arts]]></Description>
+  </CharacterClass>
+  <CharacterClass ID="6" HitDice="6">
+    <Name><![CDATA[Druid]]></Name>
+    <Description><![CDATA[Powerful caster that draws his power from nature]]></Description>
+  </CharacterClass>  
+</CharacterClasses>

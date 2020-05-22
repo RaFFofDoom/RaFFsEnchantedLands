@@ -3,6 +3,10 @@ using Engine.Factories;
 using Engine.Models;
 using Engine.Services;
 using System.IO;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System;
+using System.Diagnostics.Contracts;
 
 namespace Engine.ViewModels
 {
@@ -116,6 +120,8 @@ namespace Engine.ViewModels
 
         public bool HasTrader => CurrentTrader != null;
 
+        public string PlayerNextLevel => ShowNextLevel();
+
         #endregion
 
         /// <summary>
@@ -123,7 +129,8 @@ namespace Engine.ViewModels
         /// </summary>
         public GameSession()
         {
-            CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, 100);
+            CurrentPlayer = new Player("DefaultPlayer", CharacterRaceFactory.GetCharacterRaceByID(1), 
+                CharacterClassFactory.GetCharacterClassByID(1), 10, 10, 10, 10, 10, 10, 0, 10, 10, 10);
 
             if (!CurrentPlayer.Inventory.Weapons.Any())
             {
@@ -131,10 +138,12 @@ namespace Engine.ViewModels
             }
 
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(2001));
-            CurrentPlayer.LearnRecipe(RecipeFactory.RecipeByID(1));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3001));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3002));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3003));
+
+            CurrentPlayer.LearnRecipe(RecipeFactory.RecipeByID(1));
+
 
             CurrentWorld = WorldFactory.CreateWorld();
 
@@ -144,9 +153,14 @@ namespace Engine.ViewModels
         /// <summary>
         /// New Game - GameSession and Player
         /// </summary>
-        public GameSession(string selectedPlayerName, string selectedPlayerClass)
+        public GameSession(string selectedPlayerName, CharacterRace selectedPlayerRace, CharacterClass selectedPlayerClass, 
+            int strength, int endurance, int dexterity, int intelligence, int charisma, int luck)
         {
-            CurrentPlayer = new Player(selectedPlayerName, selectedPlayerClass, 0, 10, 10, 100);
+
+            CurrentPlayer = new Player(selectedPlayerName, selectedPlayerRace, selectedPlayerClass, 
+                strength, endurance, dexterity, intelligence, charisma, luck, 0, 
+                selectedPlayerClass.CharacterClassHitDice + selectedPlayerRace.CharacterRaceHitPointModifier, 
+                selectedPlayerClass.CharacterClassHitDice + selectedPlayerRace.CharacterRaceHitPointModifier, 10); 
 
             if (!CurrentPlayer.Inventory.Weapons.Any())
             {
@@ -154,42 +168,83 @@ namespace Engine.ViewModels
             }
 
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(2001));
-            CurrentPlayer.LearnRecipe(RecipeFactory.RecipeByID(1));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3001));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3002));
             CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3003));
 
+            CurrentPlayer.LearnRecipe(RecipeFactory.RecipeByID(1));
+
             CurrentWorld = WorldFactory.CreateWorld();
 
             CurrentLocation = CurrentWorld.LocationAt(0, 0);
-
         }
 
         /// <summary>
         /// Load Game - GameSession and Player
         /// </summary>
-        public GameSession(string loadedPlayerName, string loadedPlayerClass, int loadedExperiencePoints, int loadedMaxiumumHitPoints, int loadedCurrentHitPoints, int loadedGold)
+        public GameSession(string loadedPlayerName, CharacterRace loadedPlayerRace, CharacterClass loadedPlayerClass, 
+            int loadedStrength, int loadedEndurance, int loadedDexterity, int loadedIntelligence, int loadedCharisma, int loadedLuck,           
+            int loadedLevel, int loadedExperiencePoints, int loadedMaxiumumHitPoints, int loadedCurrentHitPoints, int loadedGold,
+            int loadedLocationX, int loadedLocationY, List<GameItem> loadedInventoryItems, Dictionary<Quest,bool> loadedPlayerQuests, 
+            List<Recipe> loadedRecipes, Dictionary<Trader,List<GameItem>> loadedTradersWIthItems)
         {
-            CurrentPlayer = new Player(loadedPlayerName, loadedPlayerClass, loadedExperiencePoints, loadedMaxiumumHitPoints, loadedCurrentHitPoints, loadedGold);
+            CurrentPlayer = new Player(loadedPlayerName, loadedPlayerRace, loadedPlayerClass, loadedStrength, loadedEndurance, loadedDexterity, 
+                loadedIntelligence, loadedCharisma, loadedLuck, loadedExperiencePoints, loadedMaxiumumHitPoints, loadedCurrentHitPoints, loadedGold);
 
-            if (!CurrentPlayer.Inventory.Weapons.Any())
+            CurrentPlayer.Level = loadedLevel;
+
+            foreach (GameItem item in loadedInventoryItems)
             {
-                CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));
+                CurrentPlayer.AddItemToInventory(item);
             }
 
-            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(2001));
-            CurrentPlayer.LearnRecipe(RecipeFactory.RecipeByID(1));
-            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3001));
-            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3002));
-            CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(3003));
+            foreach (var item in loadedPlayerQuests)
+            {
+                CurrentPlayer.Quests.Add(new QuestStatus(item.Key));
+
+                QuestStatus questCompleted =
+                    CurrentPlayer.Quests.FirstOrDefault(q => q.PlayerQuest.ID == item.Key.ID);
+
+                questCompleted.IsCompleted = item.Value;
+            }
+
+            foreach (Recipe recipe in loadedRecipes)
+            {
+                CurrentPlayer.LearnRecipe(recipe);
+            }
+
+            foreach (KeyValuePair<Trader,List<GameItem>> pair in loadedTradersWIthItems)
+            {
+
+                foreach (GameItem item in pair.Key.Inventory.Items)
+                {
+                    pair.Key.RemoveItemFromInventory(item);
+                }
+
+                foreach (GameItem item in pair.Value)
+                {
+                    pair.Key.AddItemToInventory(item);
+                }
+            }
 
             CurrentWorld = WorldFactory.CreateWorld();
 
-            CurrentLocation = CurrentWorld.LocationAt(0, 0);
+            CurrentLocation = CurrentWorld.LocationAt(loadedLocationX, loadedLocationY);
 
         }
 
-
+        /// <summary>
+        /// Returns next Player Level, in case of maximum level achieved display "Max", for use in UI
+        /// </summary>
+        public string ShowNextLevel()
+        {
+            if (_currentPlayer.Level + 1 < _currentPlayer.ExperienceLevels.Keys.Max())
+            {
+                return _currentPlayer.ExperienceLevels[_currentPlayer.Level + 1].ToString();
+            }
+            else
+            return "Max";
+        }
 
         public void MoveNorth()
         {
@@ -228,8 +283,7 @@ namespace Engine.ViewModels
             foreach (Quest quest in CurrentLocation.QuestsAvailableHere)
             {
                 QuestStatus questToComplete =
-                    CurrentPlayer.Quests.FirstOrDefault(q => q.PlayerQuest.ID == quest.ID &&
-                                                             !q.IsCompleted);
+                    CurrentPlayer.Quests.FirstOrDefault(q => q.PlayerQuest.ID == quest.ID && !q.IsCompleted);
 
                 if (questToComplete != null)
                 {
@@ -277,8 +331,7 @@ namespace Engine.ViewModels
                     _messageBroker.RaiseMessage("Return with:");
                     foreach (ItemQuantity itemQuantity in quest.ItemsToComplete)
                     {
-                        _messageBroker
-                            .RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.CreateGameItem(itemQuantity.ItemID).Name}");
+                        _messageBroker.RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.CreateGameItem(itemQuantity.ItemID).Name}");
                     }
 
                     _messageBroker.RaiseMessage("And you will receive:");
@@ -286,8 +339,7 @@ namespace Engine.ViewModels
                     _messageBroker.RaiseMessage($"   {quest.RewardGold} gold");
                     foreach (ItemQuantity itemQuantity in quest.RewardItems)
                     {
-                        _messageBroker
-                            .RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.CreateGameItem(itemQuantity.ItemID).Name}");
+                        _messageBroker.RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.CreateGameItem(itemQuantity.ItemID).Name}");
                     }
                 }
             }
@@ -327,8 +379,7 @@ namespace Engine.ViewModels
                 _messageBroker.RaiseMessage("You do not have the required ingredients:");
                 foreach (ItemQuantity itemQuantity in recipe.Ingredients)
                 {
-                    _messageBroker
-                        .RaiseMessage($"  {itemQuantity.Quantity} {ItemFactory.ItemName(itemQuantity.ItemID)}");
+                    _messageBroker.RaiseMessage($"  {itemQuantity.Quantity} {ItemFactory.ItemName(itemQuantity.ItemID)}");
                 }
             }
         }
@@ -351,11 +402,19 @@ namespace Engine.ViewModels
         private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs eventArgs)
         {
             _messageBroker.RaiseMessage($"You are now level {CurrentPlayer.Level}!");
+            OnPropertyChanged(nameof(PlayerNextLevel));
         }
 
         public void SaveGame()
         {
             File.WriteAllText(SaveLoadGame.PLAYER_DATA_FILE_NAME, SaveLoadGame.saveLoadGame.XMLSaveData(this));
+            _messageBroker.RaiseMessage("");
+            _messageBroker.RaiseMessage("Game has been saved");
+        }
+
+        public void LoadGame()
+        {
+            _messageBroker.RaiseMessage("Game has been loaded");
         }
 
     }

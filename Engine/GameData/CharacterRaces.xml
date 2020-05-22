@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CharacterRaces>
+  <CharacterRace ID="1" HitPointModifier="0">
+    <Name><![CDATA[Human]]></Name>
+    <Description><![CDATA[Just ordinary human]]></Description>
+    <AvailableClasses>
+      <AvailableClass><![CDATA[Warrior]]></AvailableClass>
+      <AvailableClass><![CDATA[Paladin]]></AvailableClass>
+      <AvailableClass><![CDATA[Rogue]]></AvailableClass>
+      <AvailableClass><![CDATA[Hunter]]></AvailableClass>
+      <AvailableClass><![CDATA[Mage]]></AvailableClass>
+      <AvailableClass><![CDATA[Druid]]></AvailableClass>
+    </AvailableClasses>
+  </CharacterRace>
+  <CharacterRace ID="2" HitPointModifier="1">
+    <Name><![CDATA[Elf]]></Name>
+    <Description><![CDATA[Skilled and agile elf]]></Description>
+    <AvailableClasses>
+      <AvailableClass><![CDATA[Warrior]]></AvailableClass>
+      <AvailableClass><![CDATA[Rogue]]></AvailableClass>
+      <AvailableClass><![CDATA[Hunter]]></AvailableClass>
+      <AvailableClass><![CDATA[Mage]]></AvailableClass>
+      <AvailableClass><![CDATA[Druid]]></AvailableClass>
+    </AvailableClasses>
+  </CharacterRace>
+  <CharacterRace ID="3" HitPointModifier="4">
+    <Name><![CDATA[Dwarf]]></Name>
+    <Description><![CDATA[Powerful Khazads]]></Description>
+    <AvailableClasses>
+      <AvailableClass><![CDATA[Warrior]]></AvailableClass>
+      <AvailableClass><![CDATA[Paladin]]></AvailableClass>
+      <AvailableClass><![CDATA[Rogue]]></AvailableClass>
+      <AvailableClass><![CDATA[Hunter]]></AvailableClass>
+    </AvailableClasses>
+  </CharacterRace>
+  <CharacterRace ID="4" HitPointModifier="-2">
+    <Name><![CDATA[Halfling]]></Name>
+    <Description><![CDATA[Like hobbits]]></Description>
+    <AvailableClasses>
+      <AvailableClass><![CDATA[Warrior]]></AvailableClass>
+      <AvailableClass><![CDATA[Rogue]]></AvailableClass>
+      <AvailableClass><![CDATA[Hunter]]></AvailableClass>
+    </AvailableClasses>
+  </CharacterRace>
+  <CharacterRace ID="5" HitPointModifier="-2">
+    <Name><![CDATA[Gnome]]></Name>
+    <Description><![CDATA[Little gnomes]]></Description>
+    <AvailableClasses>
+      <AvailableClass><![CDATA[Warrior]]></AvailableClass>
+      <AvailableClass><![CDATA[Rogue]]></AvailableClass>
+      <AvailableClass><![CDATA[Mage]]></AvailableClass>
+    </AvailableClasses>
+  </CharacterRace>
+  <CharacterRace ID="6" HitPointModifier="5">
+    <Name><![CDATA[Orc]]></Name>
+    <Description><![CDATA[Brutish orc]]></Description>
+    <AvailableClasses>
+      <AvailableClass><![CDATA[Warrior]]></AvailableClass>
+      <AvailableClass><![CDATA[Hunter]]></AvailableClass>
+    </AvailableClasses>
+  </CharacterRace>
+</CharacterRaces>

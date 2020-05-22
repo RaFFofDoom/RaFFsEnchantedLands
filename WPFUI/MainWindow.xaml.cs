@@ -20,9 +20,12 @@ namespace WPFUI
         private readonly Dictionary<Key, Action> _userInputActions =
             new Dictionary<Key, Action>();
 
-        public MainWindow(string selectedPlayerName, string selectedPlayerClass)
+        public MainWindow(string selectedPlayerName, CharacterRace selectedPlayerRace, CharacterClass selectedPlayerClass, 
+            int strength, int endurance, int dexterity, int intelligence, int charisma, int luck)
         {
-            GameSession gameSessionNewGame = new GameSession(selectedPlayerName, selectedPlayerClass);
+            GameSession gameSessionNewGame = new GameSession(selectedPlayerName, selectedPlayerRace, selectedPlayerClass, 
+                strength, endurance, dexterity, intelligence, charisma, luck);
+
             _gameSession = gameSessionNewGame;
 
             InitializeComponent();
@@ -44,6 +47,8 @@ namespace WPFUI
             _messageBroker.OnMessageRaised += OnGameMessageRaised;
 
             DataContext = _gameSession;
+
+            _gameSession.LoadGame();
         }
 
 
@@ -141,8 +146,9 @@ namespace WPFUI
         private void Onclick_SaveGame(object sender, RoutedEventArgs e)
         {
            _gameSession.SaveGame();
-            MessageBox.Show("Game has been saved", "Save Game");
+            //MessageBox.Show("Game has been saved", "Save Game");
 
         }
+
     }
 }

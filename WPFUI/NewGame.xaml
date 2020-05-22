@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Engine.ViewModels;assembly=Engine"
         d:DataContext="{d:DesignInstance viewModels:GameSession}"
+
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="RaFF's Enchanted Lands" Height="600" Width="500" ResizeMode="CanMinimize">
+        Title="RaFF's Enchanted Lands" Height="800" Width="500" ResizeMode="CanMinimize">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -18,9 +19,9 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="4">
@@ -41,15 +42,175 @@
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="70"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="210"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <TextBox x:Name="txtPlayerName" Text="Enter Name" GotFocus="txtPlayerName_GotFocus" Grid.Row="0" Height="40" Width="250" Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" MaxLines="1" MaxLength="20" />
-            <TextBox x:Name="txtPlayerCharacterClass" Text="Enter Class Name" GotFocus="txtPlayerCharacterClass_GotFocus" Grid.Row="1" Height="40" Width="250" Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" MaxLines="1" MaxLength="20" />
-            <Button Grid.Row="2" Height="40" Width="150" Margin="10" HorizontalAlignment="Center" Content="Start Game" FontSize="20" Click="OnClick_StartGame"/>
-            <Button Grid.Row="3" Height="40" Width="200" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Back to Main Menu" FontSize="20" Click="OnClick_BackToMainMenu" />
+
+            <Label Grid.Row="1" Content="Select a Race" FontWeight="SemiBold" HorizontalContentAlignment="Center"/>
+            
+            <Grid Name="GridRaces" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+                <ToggleButton x:Name="btnCharacterRaceHuman" Grid.Row="0" Grid.Column="0" Content="Human" ClickMode="Press" Checked="btnCharacterRaceHuman_Checked" Unchecked="btnCharacterRace_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterRaceElf" Grid.Row="0" Grid.Column="1" Content="Elf" ClickMode="Press" Checked="btnCharacterRaceElf_Checked" Unchecked="btnCharacterRace_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterRaceDwarf" Grid.Row="0" Grid.Column="2" Content="Dwarf" ClickMode="Press" Checked="btnCharacterRaceDwarf_Checked" Unchecked="btnCharacterRace_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterRaceHalfling" Grid.Row="1" Grid.Column="0" Content="Halfling" ClickMode="Press" Checked="btnCharacterRaceHalfling_Checked" Unchecked="btnCharacterRace_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterRaceGnome" Grid.Row="1" Grid.Column="1" Content="Gnome" ClickMode="Press" Checked="btnCharacterRaceGnome_Checked" Unchecked="btnCharacterRace_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterRaceOrc" Grid.Row="1" Grid.Column="2" Content="Orc" ClickMode="Press" HorizontalAlignment="Left" Width="100" Checked="btnCharacterRaceOrc_Checked" Unchecked="btnCharacterRace_Unchecked"/>
+                <TextBox x:Name="txtCharacterRaceDescription" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalContentAlignment="Center" Background="LightYellow" Opacity="0.7" IsReadOnly="True" IsHitTestVisible="False"/>
+            </Grid>
+
+            <Label Grid.Row="3" Content="Select a Class" FontWeight="SemiBold" HorizontalContentAlignment="Center"/>
+
+            <Grid Name="GridClasses" Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <ToggleButton x:Name="btnCharacterClassWarrior" Grid.Row="0" Grid.Column="0" Content="Warrior" ClickMode="Press" Checked="btnCharacterClassWarrior_Checked" Unchecked="btnCharacterClass_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterClassMage" Grid.Row="0" Grid.Column="1" Content="Mage" ClickMode="Press" Checked="btnCharacterClassMage_Checked" Unchecked="btnCharacterClass_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterClassRogue" Grid.Row="0" Grid.Column="2" Content="Rogue" ClickMode="Press" Checked="btnCharacterClassRogue_Checked" Unchecked="btnCharacterClass_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterClassPaladin" Grid.Row="1" Grid.Column="0" Content="Paladin" ClickMode="Press" Checked="btnCharacterClassPaladin_Checked" Unchecked="btnCharacterClass_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterClassDruid" Grid.Row="1" Grid.Column="1" Content="Druid" ClickMode="Press" Checked="btnCharacterClassDruid_Checked" Unchecked="btnCharacterClass_Unchecked"/>
+                <ToggleButton x:Name="btnCharacterClassHunter" Grid.Row="1" Grid.Column="2" Content="Hunter" ClickMode="Press" Checked="btnCharacterClassHunter_Checked" Unchecked="btnCharacterClass_Unchecked"/>
+                <TextBox x:Name="txtCharacterClassDescription" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalContentAlignment="Center" Background="LightYellow" Opacity="0.7" IsReadOnly="True" IsHitTestVisible="False"/>
+            </Grid>
+
+            <Label Grid.Row="5" Content="Stats" FontWeight="SemiBold" HorizontalContentAlignment="Center"/>
+
+            <Grid Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="50" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Strength" FontSize="15" FontWeight ="Bold"/>
+                <Label Grid.Row="1" Content="Endurance" FontSize="15" FontWeight ="Bold"/>
+                <Label Grid.Row="2" Content="Dexterity" FontSize="15" FontWeight ="Bold"/>
+                <Label Grid.Row="3" Content="Intelligence" FontSize="15" FontWeight ="Bold"/>
+                <Label Grid.Row="4" Content="Charisma" FontSize="15" FontWeight ="Bold"/>
+                <Label Grid.Row="5" Content="Luck" FontSize="15" FontWeight ="Bold"/>
+                <Label Grid.Row="6" Grid.Column="0" FontSize="15" Content="Points left:"/>
+                <Label Name="lblCommonStatsPool"  Grid.Row="6" Grid.Column="1" FontSize="15" Content="25"/>
+
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="13" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="13" />
+                        <RowDefinition Height="13" />
+                    </Grid.RowDefinitions>
+                    <TextBox Name="txtBoxStrength"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" TextAlignment="Center" VerticalContentAlignment="Center" PreviewKeyDown="txtBoxStrength_PreviewKeyDown" PreviewKeyUp="txtBoxStrength_PreviewKeyUp" TextChanged="txtBoxStrength_TextChanged" IsReadOnly="True" IsHitTestVisible="False"/>
+                    <RepeatButton Name="txtBoxStrengthPlus"  Grid.Column="1" Grid.Row="0" FontSize="8" FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="txtBoxStrengthPlus_Click">5</RepeatButton>
+                    <RepeatButton Name="txtBoxStrengthMinus"  Grid.Column="1" Grid.Row="1" FontSize="8"  FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="13" VerticalAlignment="Bottom" Click="txtBoxStrengthMinus_Click">6</RepeatButton>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="13" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="13" />
+                        <RowDefinition Height="13" />
+                    </Grid.RowDefinitions>
+                    <TextBox Name="txtBoxEndurance"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" TextAlignment="Center" VerticalContentAlignment="Center" PreviewKeyDown="txtBoxEndurance_PreviewKeyDown" PreviewKeyUp="txtBoxEndurance_PreviewKeyUp" TextChanged="txtBoxEndurance_TextChanged" IsReadOnly="True" IsHitTestVisible="False"/>
+                    <RepeatButton Name="txtBoxEndurancePlus"  Grid.Column="1" Grid.Row="0" FontSize="8" FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="txtBoxEndurancePlus_Click">5</RepeatButton>
+                    <RepeatButton Name="txtBoxEnduranceMinus"  Grid.Column="1" Grid.Row="1" FontSize="8"  FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="13" VerticalAlignment="Bottom" Click="txtBoxEnduranceMinus_Click">6</RepeatButton>
+                </Grid>
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="13" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="13" />
+                        <RowDefinition Height="13" />
+                    </Grid.RowDefinitions>
+                    <TextBox Name="txtBoxDexterity"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" TextAlignment="Center" VerticalContentAlignment="Center" PreviewKeyDown="txtBoxDexterity_PreviewKeyDown" PreviewKeyUp="txtBoxDexterity_PreviewKeyUp" TextChanged="txtBoxDexterity_TextChanged" IsReadOnly="True" IsHitTestVisible="False"/>
+                    <RepeatButton Name="txtBoxDexterityPlus"  Grid.Column="1" Grid.Row="0" FontSize="8" FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="txtBoxDexterityPlus_Click">5</RepeatButton>
+                    <RepeatButton Name="txtBoxDexterityMinus"  Grid.Column="1" Grid.Row="1" FontSize="8"  FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="13" VerticalAlignment="Bottom" Click="txtBoxDexterityMinus_Click">6</RepeatButton>
+                </Grid>
+                <Grid Grid.Row="3" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="13" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="13" />
+                        <RowDefinition Height="13" />
+                    </Grid.RowDefinitions>
+                    <TextBox Name="txtBoxIntelligence"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" TextAlignment="Center" VerticalContentAlignment="Center" PreviewKeyDown="txtBoxIntelligence_PreviewKeyDown" PreviewKeyUp="txtBoxIntelligence_PreviewKeyUp" TextChanged="txtBoxIntelligence_TextChanged" IsReadOnly="True" IsHitTestVisible="False"/>
+                    <RepeatButton Name="txtBoxIntelligencePlus"  Grid.Column="1" Grid.Row="0" FontSize="8" FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="txtBoxIntelligencePlus_Click">5</RepeatButton>
+                    <RepeatButton Name="txtBoxIntelligenceMinus"  Grid.Column="1" Grid.Row="1" FontSize="8"  FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="13" VerticalAlignment="Bottom" Click="txtBoxIntelligenceMinus_Click">6</RepeatButton>
+                </Grid>
+                <Grid Grid.Row="4" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="13" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="13" />
+                        <RowDefinition Height="13" />
+                    </Grid.RowDefinitions>
+                    <TextBox Name="txtBoxCharisma"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" TextAlignment="Center" VerticalContentAlignment="Center" PreviewKeyDown="txtBoxCharisma_PreviewKeyDown" PreviewKeyUp="txtBoxCharisma_PreviewKeyUp" TextChanged="txtBoxCharisma_TextChanged" IsReadOnly="True" IsHitTestVisible="False"/>
+                    <RepeatButton Name="txtBoxCharismaPlus"  Grid.Column="1" Grid.Row="0" FontSize="8" FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="txtBoxCharismaPlus_Click">5</RepeatButton>
+                    <RepeatButton Name="txtBoxCharismaMinus"  Grid.Column="1" Grid.Row="1" FontSize="8"  FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="13" VerticalAlignment="Bottom" Click="txtBoxCharismaMinus_Click">6</RepeatButton>
+                </Grid>
+                <Grid Grid.Row="5" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="13" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="13" />
+                        <RowDefinition Height="13" />
+                    </Grid.RowDefinitions>
+                    <TextBox Name="txtBoxLuck"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" TextAlignment="Center" VerticalContentAlignment="Center" PreviewKeyDown="txtBoxLuck_PreviewKeyDown" PreviewKeyUp="txtBoxLuck_PreviewKeyUp" TextChanged="txtBoxLuck_TextChanged" IsReadOnly="True" IsHitTestVisible="False"/>
+                    <RepeatButton Name="txtBoxLuckPlus"  Grid.Column="1" Grid.Row="0" FontSize="8" FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="txtBoxLuckPlus_Click">5</RepeatButton>
+                    <RepeatButton Name="txtBoxLuckMinus"  Grid.Column="1" Grid.Row="1" FontSize="8"  FontFamily="Marlett" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="13" VerticalAlignment="Bottom" Click="txtBoxLuckMinus_Click">6</RepeatButton>
+                </Grid>
+            </Grid>
+            
+
+
+            <Button x:Name="btnStartGame" Grid.Row="7" Height="40" Width="150" Margin="10" HorizontalAlignment="Center" Content="Start Game" FontSize="20" Click="OnClick_StartGame"/>
+            <Button x:Name="btnBackMainMenu" Grid.Row="8" Height="40" Width="200" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="Back to Main Menu" FontSize="20" Click="OnClick_BackToMainMenu" />
         </Grid>
 
     </Grid>

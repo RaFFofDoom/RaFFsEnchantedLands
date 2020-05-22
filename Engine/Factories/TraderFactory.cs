@@ -56,5 +56,10 @@ namespace Engine.Factories
         {
             return _traders.FirstOrDefault(t => t.ID == id);
         }
+
+        public static List<Trader> GetTraderList()
+        {
+            return _traders;
+        }
     }
 }

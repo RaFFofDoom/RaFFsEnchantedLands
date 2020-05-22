@@ -42,21 +42,22 @@
                   HeadersVisibility="Column"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
-                  VerticalScrollBarVisibility="Auto">
+                  VerticalScrollBarVisibility="Auto"
+                  SelectionMode="Single">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Description"
                                     IsReadOnly="True"
                                     Width="*"
                                     Binding="{Binding Path=Item.Name}"/>
-                <DataGridTextColumn Header="Qty"
-                                    IsReadOnly="True"
-                                    Width="Auto"
-                                    Binding="{Binding Quantity}"/>
                 <DataGridTextColumn Header="Price"
                                     IsReadOnly="True"
                                     Width="Auto"
                                     Binding="{Binding Path=Item.Price}"/>
+                <DataGridTextColumn Header="Qty"
+                                    IsReadOnly="True"
+                                    Width="Auto"
+                                    Binding="{Binding Quantity}"/>
                 <DataGridTemplateColumn MinWidth="75">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -77,21 +78,22 @@
                   HeadersVisibility="Column"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
-                  VerticalScrollBarVisibility="Auto">
+                  VerticalScrollBarVisibility="Auto"
+                  SelectionMode="Single">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Description"
                                     IsReadOnly="True"
                                     Width="*"
                                     Binding="{Binding Path=Item.Name}"/>
-                <DataGridTextColumn Header="Qty"
-                                    IsReadOnly="True"
-                                    Width="Auto"
-                                    Binding="{Binding Quantity}"/>
                 <DataGridTextColumn Header="Price"
                                     IsReadOnly="True"
                                     Width="Auto"
                                     Binding="{Binding Path=Item.Price}"/>
+                <DataGridTextColumn Header="Qty"
+                                    IsReadOnly="True"
+                                    Width="Auto"
+                                    Binding="{Binding Quantity}"/>
                 <DataGridTemplateColumn MinWidth="75">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

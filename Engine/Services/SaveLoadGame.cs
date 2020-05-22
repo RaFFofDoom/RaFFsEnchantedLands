@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Engine.Models;
 using System.Xml;
 using Engine.ViewModels;
+using Engine.Factories;
+using System.Data;
 
 namespace Engine.Services
 {
@@ -20,23 +22,50 @@ namespace Engine.Services
         {
             XmlDocument playerData = new XmlDocument();
 
-            // Create the top-level XML node
-            XmlNode player = playerData.CreateElement("Player");
-            playerData.AppendChild(player);
+            XmlNode saveGame = playerData.CreateElement("SaveGame");
+            playerData.AppendChild(saveGame);
 
-            // Create the "Stats" child node to hold the other player statistics nodes
+            XmlNode player = playerData.CreateElement("Player");
+            saveGame.AppendChild(player);
+
             XmlNode stats = playerData.CreateElement("Stats");
             player.AppendChild(stats);
-
-            // Create the child nodes for the "Stats" node
 
             XmlNode playerName = playerData.CreateElement("PlayerName");
             playerName.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Name));
             stats.AppendChild(playerName);
 
             XmlNode playerClass = playerData.CreateElement("PlayerClass");
-            playerClass.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.CharacterClass));
+            playerClass.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.CharacterClass.ID.ToString()));
             stats.AppendChild(playerClass);
+
+            XmlNode playerRace = playerData.CreateElement("PlayerRace");
+            playerRace.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.CharacterRace.ID.ToString()));
+            stats.AppendChild(playerRace);
+
+            XmlNode playerStrength = playerData.CreateElement("Strength");
+            playerStrength.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Strength.ToString()));
+            stats.AppendChild(playerStrength);
+
+            XmlNode playerEndurance = playerData.CreateElement("Endurance");
+            playerEndurance.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Endurance.ToString()));
+            stats.AppendChild(playerEndurance);
+
+            XmlNode playerDexterity = playerData.CreateElement("Dexterity");
+            playerDexterity.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Dexterity.ToString()));
+            stats.AppendChild(playerDexterity);
+
+            XmlNode playerIntelligence = playerData.CreateElement("Intelligence");
+            playerIntelligence.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Intelligence.ToString()));
+            stats.AppendChild(playerIntelligence);
+
+            XmlNode playerCharisma = playerData.CreateElement("Charisma");
+            playerCharisma.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Charisma.ToString()));
+            stats.AppendChild(playerCharisma);
+
+            XmlNode playerLuck = playerData.CreateElement("Luck");
+            playerLuck.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Luck.ToString()));
+            stats.AppendChild(playerLuck);
 
             XmlNode currentHitPoints = playerData.CreateElement("CurrentHitPoints");
             currentHitPoints.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.CurrentHitPoints.ToString()));
@@ -46,10 +75,6 @@ namespace Engine.Services
             maximumHitPoints.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.MaximumHitPoints.ToString()));
             stats.AppendChild(maximumHitPoints);
 
-            XmlNode gold = playerData.CreateElement("Gold");
-            gold.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Gold.ToString()));
-            stats.AppendChild(gold);
-
             XmlNode level = playerData.CreateElement("Level");
             level.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Level.ToString()));
             stats.AppendChild(level);
@@ -58,7 +83,13 @@ namespace Engine.Services
             experiencePoints.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.ExperiencePoints.ToString()));
             stats.AppendChild(experiencePoints);
 
+            XmlNode gold = playerData.CreateElement("Gold");
+            gold.AppendChild(playerData.CreateTextNode(gs.CurrentPlayer.Gold.ToString()));
+            stats.AppendChild(gold);
+
+
             XmlNode currentLocation = playerData.CreateElement("CurrentLocation");
+            player.AppendChild(currentLocation);
 
             XmlAttribute yAttribute = playerData.CreateAttribute("Y");
             yAttribute.Value = gs.CurrentLocation.YCoordinate.ToString();
@@ -68,13 +99,10 @@ namespace Engine.Services
             xAttribute.Value = gs.CurrentLocation.XCoordinate.ToString();
             currentLocation.Attributes.Append(xAttribute);
 
-            stats.AppendChild(currentLocation);
 
-            // Create the "InventoryItems" child node to hold each InventoryItem node
             XmlNode inventoryItems = playerData.CreateElement("InventoryItems");
             player.AppendChild(inventoryItems);
 
-            // Create an "InventoryItem" node for each item in the player's inventory
             foreach (GameItem item in gs.CurrentPlayer.Inventory.Items)
             {
                 XmlNode inventoryItem = playerData.CreateElement("InventoryItem");
@@ -83,18 +111,13 @@ namespace Engine.Services
                 idAttribute.Value = item.ItemTypeID.ToString();
                 inventoryItem.Attributes.Append(idAttribute);
 
-                XmlAttribute quantityAttribute = playerData.CreateAttribute("Quantity");
-                quantityAttribute.Value = item.Name;
-                inventoryItem.Attributes.Append(quantityAttribute);
-
                 inventoryItems.AppendChild(inventoryItem);
             }
 
-            // Create the "PlayerQuests" child node to hold each PlayerQuest node
+
             XmlNode playerQuests = playerData.CreateElement("PlayerQuests");
             player.AppendChild(playerQuests);
 
-            // Create a "PlayerQuest" node for each quest the player has acquired
             foreach (QuestStatus quest in gs.CurrentPlayer.Quests)
             {
                 XmlNode playerQuest = playerData.CreateElement("PlayerQuest");
@@ -110,6 +133,48 @@ namespace Engine.Services
                 playerQuests.AppendChild(playerQuest);
             }
 
+
+            XmlNode recipes = playerData.CreateElement("Recipes");
+            player.AppendChild(recipes);
+
+            foreach (Recipe r in gs.CurrentPlayer.Recipes)
+            {
+                XmlNode recipe = playerData.CreateElement("Recipe");
+
+                XmlAttribute idAttribute = playerData.CreateAttribute("ID");
+                idAttribute.Value = r.ID.ToString();
+                recipe.Attributes.Append(idAttribute);
+
+                recipes.AppendChild(recipe);
+            }
+
+
+            XmlNode traders = playerData.CreateElement("Traders");
+            saveGame.AppendChild(traders);
+
+            foreach (Trader trader in TraderFactory.GetTraderList())
+            {
+                XmlNode traderNode = playerData.CreateElement("Trader");
+
+                XmlAttribute traderID = playerData.CreateAttribute("TraderID");
+                traderID.Value = trader.ID.ToString();
+                traderNode.Attributes.Append(traderID);
+
+                foreach (GameItem item in trader.Inventory.Items)
+                {
+                    XmlNode inventoryItem = playerData.CreateElement("InventoryItem");
+
+                    XmlAttribute idAttribute = playerData.CreateAttribute("ItemID");
+                    idAttribute.Value = item.ItemTypeID.ToString();
+                    inventoryItem.Attributes.Append(idAttribute);
+
+                    traderNode.AppendChild(inventoryItem);
+                }
+
+                traders.AppendChild(traderNode);
+
+            }
+
             return playerData.InnerXml; // The XML document, as a string, so we can save the data to disk
         }
 
@@ -119,53 +184,84 @@ namespace Engine.Services
 
             playerData.LoadXml(xmlPlayerData);
 
-            string playerName = playerData.SelectSingleNode("/Player/Stats/PlayerName").InnerText;
-            string playerCharacterClass = playerData.SelectSingleNode("/Player/Stats/PlayerClass").InnerText;
-            int playerExperiencePoints = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/ExperiencePoints").InnerText);
-            int playerMaximumHitPoitns = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/MaximumHitPoints").InnerText);
-            int playerCurrentHitPoints = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/CurrentHitPoints").InnerText);
-            int playerGold = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/Gold").InnerText);
-            //int level = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/Level").InnerText);
+            string playerName = playerData.SelectSingleNode("/SaveGame/Player/Stats/PlayerName").InnerText;
+            CharacterRace playerCharacterRace = CharacterRaceFactory.GetCharacterRaceByID(Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/PlayerRace").InnerText));
+            CharacterClass playerCharacterClass = CharacterClassFactory.GetCharacterClassByID(Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/PlayerClass").InnerText));
+            int playerStrength = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/Strength").InnerText);
+            int playerEndurance = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/Endurance").InnerText);
+            int playerDexterity = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/Dexterity").InnerText);
+            int playerIntelligence = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/Intelligence").InnerText);
+            int playerCharisma = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/Charisma").InnerText);
+            int playerLuck = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/Luck").InnerText);
+            int playerExperiencePoints = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/ExperiencePoints").InnerText);
+            int playerMaximumHitPoitns = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/MaximumHitPoints").InnerText);
+            int playerCurrentHitPoints = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/CurrentHitPoints").InnerText);
+            int playerGold = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/Gold").InnerText);
+            int playerLevel = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/Stats/Level").InnerText);
+            int playerLocationX = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/CurrentLocation").Attributes["X"].Value);
+            int playerLocationY = Convert.ToInt32(playerData.SelectSingleNode("/SaveGame/Player/CurrentLocation").Attributes["Y"].Value);
 
 
+            List<GameItem> playerInventoryItems = new List<GameItem>();
 
-            // Race raceToLoad = World.Races.Where((r => r.RaceName == race)).First();
-            //Class classToLoad = World.Classes.Where((r => r.ClassName == playerClass)).First();
-            GameSession gameSession = new GameSession(playerName, playerCharacterClass, playerExperiencePoints, playerMaximumHitPoitns, playerCurrentHitPoints, playerGold);
-            //Player player = new Player(playerName, currentHitPoints, maximumHitPoints, gold, experiencePoints, raceToLoad, classToLoad);
+            foreach (XmlNode node in playerData.SelectNodes("/SaveGame/Player/InventoryItems/InventoryItem"))
+            {
+                int id = Convert.ToInt32(node.Attributes["ID"].Value);
 
-            //player.Level = level;
+                playerInventoryItems.Add(ItemFactory.CreateGameItem(id));
 
-            //int currentLocationID = Convert.ToInt32(playerData.SelectSingleNode("/Player/Stats/CurrentLocation").InnerText);
+            }
 
-            //player.CurrentLocation = World.LocationByID(currentLocationID);
+            List<Quest> playerQuests = new List<Quest>();
+            Dictionary<Quest, bool> playerQuestsWithStatus = new Dictionary<Quest, bool>();
 
-            //foreach (XmlNode node in playerData.SelectNodes("/Player/InventoryItems/InventoryItem"))
-            //{
-            //    int id = Convert.ToInt32(node.Attributes["ID"].Value);
-            //    int quantity = Convert.ToInt32(node.Attributes["Quantity"].Value);
+            foreach (XmlNode node in playerData.SelectNodes("/SaveGame/Player/PlayerQuests/PlayerQuest"))
+            {
+                int id = Convert.ToInt32(node.Attributes["ID"].Value);
+                bool isCompleted = Convert.ToBoolean(node.Attributes["IsCompleted"].Value);
 
-            //    for (int i = 0; i < quantity; i++)
-            //    {
-            //        player.AddItemToInventory(World.ItemByID(id));
-            //    }
-            //}
+                playerQuests.Add(QuestFactory.GetQuestByID(id));
 
-            //foreach (XmlNode node in playerData.SelectNodes("/Player/PlayerQuests/PlayerQuest"))
-            //{
-            //    int id = Convert.ToInt32(node.Attributes["ID"].Value);
-            //    bool isCompleted = Convert.ToBoolean(node.Attributes["IsCompleted"].Value);
+                playerQuestsWithStatus.Add(QuestFactory.GetQuestByID(id), isCompleted);
+            }
 
-            //    PlayerQuest playerQuest = new PlayerQuest(World.QuestByID(id));
-            //    playerQuest.IsCompleted = isCompleted;
 
-            //    player.Quests.Add(playerQuest);
-            //}
+            List<Recipe> playerRecipes = new List<Recipe>();
+
+            foreach (XmlNode node in playerData.SelectNodes("/SaveGame/Player/Recipes/Recipe"))
+            {
+                int id = Convert.ToInt32(node.Attributes["ID"].Value);
+
+                playerRecipes.Add(RecipeFactory.RecipeByID(id));
+
+            }
+
+            Dictionary<Trader, List<GameItem>> tradersWithItems = new Dictionary<Trader, List<GameItem>>();
+
+            foreach (XmlNode node in playerData.SelectNodes("/SaveGame/Traders/Trader"))
+            {
+                int traderID = Convert.ToInt32(node.Attributes["TraderID"].Value);
+                List<GameItem> traderItems = new List<GameItem>();
+
+                foreach (XmlNode itemnode in node.SelectNodes("InventoryItem"))
+                {
+                    int itemID = Convert.ToInt32(itemnode.Attributes["ItemID"].Value);
+
+                    traderItems.Add(ItemFactory.CreateGameItem(itemID));
+                }
+
+                tradersWithItems.Add(TraderFactory.GetTraderByID(traderID), traderItems);
+
+            }
+
+            GameSession gameSession = new GameSession(playerName, playerCharacterRace, playerCharacterClass, playerStrength, playerEndurance, 
+                playerDexterity, playerIntelligence, playerCharisma, playerLuck, playerLevel, playerExperiencePoints, playerMaximumHitPoitns, 
+                playerCurrentHitPoints, playerGold, playerLocationX, playerLocationY, playerInventoryItems, playerQuestsWithStatus, 
+                playerRecipes, tradersWithItems);
 
             return gameSession;
         }
 
     }
-
 
 }

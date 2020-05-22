@@ -9,6 +9,12 @@ namespace Engine.Models
         #region Properties
 
         private string _name;
+        private int _strength;
+        private int _endurance;
+        private int _dexterity;
+        private int _intelligence;
+        private int _charisma;
+        private int _luck;
         private int _currentHitPoints;
         private int _maximumHitPoints;
         private int _gold;
@@ -19,7 +25,7 @@ namespace Engine.Models
 
         public string Name
         {
-            get { return _name; }
+            get => _name;
             private set
             {
                 _name = value;
@@ -27,9 +33,69 @@ namespace Engine.Models
             }
         }
 
+        public int Strength
+        {
+            get => _strength;
+            private set
+            {
+                _strength = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Endurance
+        {
+            get => _endurance;
+            private set
+            {
+                _endurance = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Dexterity
+        {
+            get => _dexterity;
+            private set
+            {
+                _dexterity = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Intelligence
+        {
+            get => _intelligence;
+            private set
+            {
+                _intelligence = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Charisma
+        {
+            get => _charisma;
+            private set
+            {
+                _charisma = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Luck
+        {
+            get => _luck;
+            private set
+            {
+                _luck = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int CurrentHitPoints
         {
-            get { return _currentHitPoints; }
+            get => _currentHitPoints;
             private set
             {
                 _currentHitPoints = value;
@@ -39,7 +105,7 @@ namespace Engine.Models
 
         public int MaximumHitPoints
         {
-            get { return _maximumHitPoints; }
+            get => _maximumHitPoints; 
             protected set
             {
                 _maximumHitPoints = value;
@@ -49,7 +115,7 @@ namespace Engine.Models
 
         public int Gold
         {
-            get { return _gold; }
+            get => _gold;
             private set
             {
                 _gold = value;
@@ -59,8 +125,8 @@ namespace Engine.Models
 
         public int Level
         {
-            get { return _level; }
-            protected set
+            get => _level;
+            set   //zmiana z protected set, test dla save/load - działa
             {
                 _level = value;
                 OnPropertyChanged();
@@ -79,7 +145,7 @@ namespace Engine.Models
 
         public GameItem CurrentWeapon
         {
-            get { return _currentWeapon; }
+            get => _currentWeapon;
             set
             {
                 if (_currentWeapon != null)
@@ -127,10 +193,16 @@ namespace Engine.Models
         public event EventHandler<string> OnActionPerformed;
         public event EventHandler OnKilled;
 
-        protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints,
-                               int gold, int level = 1)
+        protected LivingEntity(string name, int strength, int endurance, int dexterity, int intelligence, int charisma, int luck,
+            int maximumHitPoints, int currentHitPoints, int gold, int level = 1)
         {
             Name = name;
+            Strength = strength;
+            Endurance = endurance;
+            Dexterity = dexterity;
+            Intelligence = intelligence;
+            Charisma = charisma;
+            Luck = luck;
             MaximumHitPoints = maximumHitPoints;
             CurrentHitPoints = currentHitPoints;
             Gold = gold;
